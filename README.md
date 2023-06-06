@@ -51,7 +51,7 @@ Divirta-se explorando o mundo do Merge Sort!
 ## Compilação e Execução 
 
 <p align="justify">
-Esse programa possui um arquivo Makefile que realiza todo o procedimento de compilação e execução tanto em C quanto em C++. Contudo há necessidade de uma pequena mudança na variação entre essas linguagens. Para tanto, temos as seguintes diretrizes de execução:
+Esse programa possui um arquivo Makefile que realiza todo o procedimento de compilação e execução tanto em C quanto em C++. Contudo, há necessidade de uma pequena mudança no arquivo Makefile para variação entre essas linguagens. Para tanto, temos as seguintes diretrizes de execução:
 </p>
 
 | Comando                |  Função                                                                                               |                     
