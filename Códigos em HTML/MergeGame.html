@@ -1,0 +1,209 @@
+<!DOCTYPE HTML>
+<html lang="en-gb">
+<head>
+<title>Merge Sort</title>
+<style>
+#container    {width: 100%; margin: 5px auto 20px auto; height: 100%; text-align: center}
+#merge_area   {width: min(95vw, 800px); display: inline-block; text-align: left; padding: 0; vertical-align: middle}
+.number       {border-radius: 20%; border: 1px solid grey; background-color: rgba(255,255,255,0.8); text-align: center; display: flex; float: left; align-items: center; justify-content: center; height: min(64px, 8vw); font-size: min(42px, 5vw); visibility: hidden}
+.row          {display: inline-block; border: 1px solid black; margin: 1px calc(0.5% - 1px); text-align: center; height: min(80px, 10vw)}
+.one          {width: 11.3%}
+.one .number  {width: calc(84% - 2px); margin: 8%}
+.two          {width: 23.6%}
+.two .number  {width: calc(42% - 2px); margin: 4%}
+.four         {width: 48.2%}
+.four .number {width: calc(21% - 2px); margin: 2%}
+.eight        {width: 97.4%}
+.eight .number {width: calc(10.5% - 2px); margin: 1%}
+#controls     {margin: 0 20px; width: 520px; max-width: calc(95vw - 40px); vertical-align: middle; display: inline-block}
+#controls p   {text-align: center}
+#p {font-size: 20px;}
+#commentary   {height: 80px; vertical-align: middle; width: auto; font-size: 20px;}
+#imagem-gif {display: block; margin: 0 auto;}
+</style>
+<SCRIPT>
+<!--
+var list_pos = new Array();
+var list_index = new Array();
+var list_max = new Array();
+var max_val = new Array(1,1,1,1,1,1,1,1,2,2,2,2,4,4);
+var merge, numbers, rows, merge_index, merge_list, start_time, game_over, left, right, pen;
+
+function time_now()
+{
+	var d = new Date();
+	return d.getTime();
+}
+
+function init()
+{
+  var number = new Array();
+  var i;
+  left = -2;
+  right = -1;
+  pen = 2;
+  list_pos = [-2, -1];
+  list_index = [0, 0];
+  list_max = [0, 0];
+  numbers = document.getElementsByClassName("number");
+  while(number.length < 8)
+  {
+    i = Math.floor(Math.random() * 94) + 6;
+    if(number.includes(i) == false) 
+    { 
+      numbers[number.length].innerHTML = i;
+      numbers[number.length].style.visibility = "visible";
+      number.push(i);
+    }
+  }
+  document.onkeydown = key_pressed;
+  rows = document.getElementsByClassName("row");
+  document.getElementById("commentary").innerHTML = "Escolha se o próximo elemento a entrar na caixa vermelha pontilhada vem da lista da esquerda (vermelha) ou da direita (verde). Você pode usar as teclas <em>A</em> e <em>D</em> do teclado, os botões acima ou clicar na própria lista.";
+  penalty = 0;
+  merge = 0;
+  start_time = time_now();
+  game_over = false;
+  next_list();
+}
+
+function next_list()
+{
+  if(merge < 14)
+  {
+    var merge_target = new Array(8,8,9,9,10,10,11,11,12,12,13,13,14);
+    if(list_pos[0] >= 0)
+    {
+      rows[left].style.backgroundColor = "#FFFFFF";
+      rows[left].removeAttribute("onclick");
+      rows[right].style.backgroundColor = "#FFFFFF";
+      rows[right].removeAttribute("onclick");
+      rows[merge].style.border = "1px solid black";
+      rows[merge].style.margin = "1px calc(0.5% - 1px)";
+    }
+    left += 2;
+    right += 2;
+    list_pos = [left, right];
+    list_index = [0, 0];
+    list_max = [max_val[left], max_val[right]];
+    merge_index = 0;
+    merge = merge_target[left];
+    rows[left].style.backgroundColor = "#990000";
+    rows[left].setAttribute("onclick", "choose(0)");
+    rows[right].style.backgroundColor = "#007700";
+    rows[right].setAttribute("onclick", "choose(1)");
+    rows[merge].style.border = "2px dashed red";
+    rows[merge].style.margin = "0 calc(0.5% - 2px)";
+    numbers = [rows[left].getElementsByClassName("number"), rows[right].getElementsByClassName("number")];
+    merge_list = rows[merge].getElementsByClassName("number");
+  }
+  else
+  {
+    end_game();
+  }
+}
+
+function choose(chosen)
+{
+  if(!game_over)
+  {
+    var other = 1 - chosen;
+    var correct;
+    if(list_index[other] < max_val[list_pos[other]] && list_index[chosen] < max_val[list_pos[chosen]])
+    {
+      correct = numbers[chosen][list_index[chosen]].innerHTML*1 < numbers[other][list_index[other]].innerHTML*1;
+    }
+    else
+    {
+      correct = list_index[chosen] < max_val[list_pos[chosen]];
+    }
+    if(correct)
+    {
+      merge_list[merge_index].style.visibility = "visible";
+      merge_list[merge_index].innerHTML = numbers[chosen][list_index[chosen]].innerHTML;
+      numbers[chosen][list_index[chosen]].style.opacity = 0.1;
+      document.getElementById("commentary").innerHTML = "Acertou! - " + numbers[chosen][list_index[chosen]].innerHTML + " era o número mais baixo.";
+      list_index[chosen]++;
+    }
+    else
+    {
+      merge_list[merge_index].style.visibility = "visible";
+      merge_list[merge_index].innerHTML = numbers[other][list_index[other]].innerHTML;
+      numbers[other][list_index[other]].style.opacity = 0.1;
+      document.getElementById("commentary").innerHTML = "Errou! - " + numbers[other][list_index[other]].innerHTML + " era o número mais baixo.";
+      list_index[other]++;
+      penalty += pen;
+    }
+    merge_index++;
+    if(list_index[other] == max_val[list_pos[other]] && list_index[chosen] == max_val[list_pos[chosen]]) { next_list(); }
+  }
+}
+
+function reset()
+{
+  rows[merge].style.border = "1px solid black";
+  rows[merge].style.margin = "1px calc(0.5% - 1px)";
+  numbers = document.getElementsByClassName("number");
+  for(var i = 0; i < numbers.length; i++)
+  {
+    numbers[i].innerHTML = "";
+    numbers[i].style.visibility = "hidden";
+    numbers[i].style.opacity = 1;
+  }
+  init();
+}
+
+function end_game()
+{
+  var time_taken = Math.round((time_now() - start_time) / 1000);
+  rows[left].style.backgroundColor = "#FFFFFF";
+  rows[left].removeAttribute("onclick");
+  rows[right].style.backgroundColor = "#FFFFFF";
+  rows[right].removeAttribute("onclick");
+  game_over = true;
+  var text = "Os números foram classificados com sucesso em " + time_taken + " segundos."
+  if(penalty > 0) { text += " Houve uma penalidade de " + penalty + " segundos para escolhas incorretas, fazendo um total de " + (time_taken + penalty) + " segundos."; }
+  text += "<input type=button value='Jogar Novamente' onclick='reset()' style='margin: 5px auto; display: block'>"
+  document.getElementById("commentary").innerHTML = text;
+}
+
+function key_pressed(event)
+{
+	var ev = event || window.event;
+	var tile, next;
+  {
+    if(ev.key == "a" || ev.key == "A") {	choose(0); }
+    if(ev.key == "d" || ev.key == "D") {	choose(1); }
+  }
+}
+//-->
+</SCRIPT>
+</head>
+
+<BODY onload="init()">
+
+<article>
+<header>
+<h1>Merge Sort</h1>
+</header>
+<p id="p">Jogue este jogo interativo de classificação por mesclagem para verificar sua compreensão do algoritmo de classificação por mesclagem.</p>
+<p id="p">A primeira etapa de uma classificação por mesclagem é dividir os itens a serem classificados em listas separadas, cada uma contendo um valor. - (Essa parte é feita para você)</p>
+<p id="p">Em cada linha, você está mesclando duas listas (de vermelho e verde) em uma nova lista maior (com a borda vermelha) </p>
+<p id="p">Escolha se o próximo número deve vir da lista da esquerda (vermelha) ou da lista da direita (verde).</p>
+<p id="p">Você será cronometrado para ver quanto tempo leva para concluir a classificação e haverá uma penalidade de dois segundos para cada decisão incorreta.</p>
+<div id="container">
+<div id="merge_area">
+<div class="one row"><div class="number"></div></div><div class="one row"><div class="number"></div></div><div class="one row"><div class="number"></div></div><div class="one row"><div class="number"></div></div><div class="one row"><div class="number"></div></div><div class="one row"><div class="number"></div></div><div class="one row"><div class="number"></div></div><div class="one row"><div class="number"></div></div>
+<div class="two row"><div class="number"></div><div class="number"></div></div><div class="two row"><div class="number"></div><div class="number"></div></div><div class="two row"><div class="number"></div><div class="number"></div></div><div class="two row"><div class="number"></div><div class="number"></div></div>
+<div class="four row"><div class="number"></div><div class="number"></div><div class="number"></div><div class="number"></div></div><div class="four row"><div class="number"></div><div class="number"></div><div class="number"></div><div class="number"></div></div>
+<div class="eight row"><div class="number"></div><div class="number"></div><div class="number"></div><div class="number"></div><div class="number"></div><div class="number"></div><div class="number"></div><div class="number"></div></div>
+</div>
+<div id="controls">
+<p id="p">Mesclar o próximo item de: <input type="button" value="Esquerda" onclick="choose(0)" style="background-color: #990000"> <input type="button" value="Direita" onclick="choose(1)" style="background-color: #007700"></p>
+<p id="commentary"></p>
+</div></div>
+</article>
+
+<img src="https://media.tenor.com/wUdaAg8Kms4AAAAC/sweaty-sweat.gif" alt="Imagem GIF" id="imagem-gif">
+
+</BODY>
+</HTML>
