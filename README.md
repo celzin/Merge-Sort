@@ -12,7 +12,7 @@
 </div><br/>
 
 <div align="justify">           
-Bem-vindo ao repositório do Merge Sort! Aqui você encontrará recursos relacionados a esse popular método de ordenação. O repositório é projetado para fornecer uma compreensão aprofundada do algoritmo Merge Sort, desde um artigo científico detalhado até apresentações de slides e implementações práticas em diferentes linguagens de programação.
+Bem-vindo ao repositório do nosso trabalho sobre Merge Sort! Aqui você encontrará recursos relacionados a esse popular método de ordenação. O repositório é projetado para fornecer uma compreensão aprofundada do algoritmo Merge Sort, desde um artigo científico detalhado até apresentações de slides e implementações práticas em diferentes linguagens de programação.
 </div>
                     
 ## Artigo Científico
