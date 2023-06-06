@@ -48,6 +48,18 @@ Se você tiver alguma dúvida ou sugestão, sinta-se à vontade para entrar em c
 Divirta-se explorando o mundo do Merge Sort!
 </div>
                     
+## Compilação e Execução 
+
+<p align="justify">
+Esse programa possui um arquivo Makefile que realiza todo o procedimento de compilação e execução tanto em C quanto em C++. Contudo há necessidade de uma pequena mudança na variação entre essas linguagens. Para tanto, temos as seguintes diretrizes de execução:
+</p>
+
+| Comando                |  Função                                                                                               |                     
+| -----------------------| ------------------------------------------------------------------------------------------------------|
+|  `make clean`          | Apaga a última compilação realizada contida na pasta build                                            |
+|  `make`                | Executa a compilação do programa utilizando o gcc, e o resultado vai para a pasta build               |
+|  `make run`            | Executa o programa da pasta build após a realização da compilação                                     |
+                    
 ## Contato dos Colaboradores
 
 | Participante           |  Contato                                                                                               |                     
